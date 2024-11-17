@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9FEVT2ZE3Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9FEVT2ZE3Z');  // Your tracking ID
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-commerce Simulation</title>
@@ -143,7 +153,7 @@
             color: #001f3f;
         }
 
-              /* Home Icon */
+        /* Home Icon */
         .home {
             position: fixed;
             top: 10px;
@@ -241,16 +251,35 @@
             cart.push(item);
             localStorage.setItem('cart', JSON.stringify(cart));
             alert(`${item.title} - Size: ${item.size} has been added to your cart.`);
+
+            // Track 'Add to Cart' event with Google Analytics
+            gtag('event', 'add_to_cart', {
+                'event_category': 'Ecommerce',
+                'event_label': item.title,
+                'value': item.price
+            });
         }
 
         function selectSize(button) {
             const allButtons = document.querySelectorAll('.sizes button');
             allButtons.forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
+
+            // Track 'Select Size' event with Google Analytics
+            gtag('event', 'select_size', {
+                'event_category': 'Ecommerce',
+                'event_label': button.textContent
+            });
         }
 
         function viewCart() {
             window.location.href = 'https://nusiancechild.github.io/checkoutpage/'; // Redirect to checkout page
+
+            // Track 'View Cart' event with Google Analytics
+            gtag('event', 'view_cart', {
+                'event_category': 'Ecommerce',
+                'event_label': 'User viewed cart'
+            });
         }
 
         window.onload = renderCart;
@@ -307,3 +336,4 @@
     </div>
 </body>
 </html>
+
