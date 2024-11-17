@@ -227,28 +227,45 @@
             totalContainer.textContent = `Total: $${total}.00`;
         }
 
-        function addToCart() {
-            const size = document.querySelector('.sizes button.selected');
-            if (!size) {
-                alert("Please select a size before adding to cart.");
-                return;
-            }
-            const item = {
-                title: "CROP HOODIE",
-                size: size.textContent,
-                price: 150
-            };
-            cart.push(item);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            alert(`${item.title} - Size: ${item.size} has been added to your cart.`);
+        // Capture the time when the page was loaded
+const pageLoadTime = performance.now(); // in milliseconds
 
-            // Track 'Add to Cart' event with Google Analytics
-            gtag('event', 'add_to_cart', {
-                'event_category': 'Ecommerce',
-                'event_label': item.title,
-                'value': item.price
-            });
-        }
+// Capture the time when the Add to Cart button was clicked
+function addToCart() {
+    const startTime = performance.now(); // start time of the event
+    const size = document.querySelector('.sizes button.selected');
+    if (!size) {
+        alert("Please select a size before adding to cart.");
+        return;
+    }
+    const item = {
+        title: "CROP HOODIE",
+        size: size.textContent,
+        price: 150
+    };
+    
+    // Log click time and speed (in milliseconds)
+    const endTime = performance.now();
+    const clickTime = endTime - startTime;
+
+    // Log the event
+    const eventData = {
+        event: 'add_to_cart',
+        time: clickTime,
+        pageLoadTime: pageLoadTime,
+        size: item.size,
+        itemTitle: item.title,
+        timestamp: new Date().toISOString() // Date and time when this event occurred
+    };
+
+    // Store data in localStorage (or log to console for now)
+    let behaviorLogs = JSON.parse(localStorage.getItem('behaviorLogs')) || [];
+    behaviorLogs.push(eventData);
+    localStorage.setItem('behaviorLogs', JSON.stringify(behaviorLogs));
+
+    alert(`${item.title} - Size: ${item.size} has been added to your cart.`);
+}
+
 
         function selectSize(button) {
             const allButtons = document.querySelectorAll('.sizes button');
